@@ -1,0 +1,24 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main  # Change this to your main branch name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo yum install python3
+        sudo yum install python3-pip
+        pip3 install -r requirements.txt
+
+    - name: Deploy code
+      run: |
+        ssh -i /path/to/your/private/key.pem ec2-user@your-ec2-instance-ip "cd /path/to/your/django/app && git pull origin main && sudo systemctl restart gunicorn.service"  # Change these placeholders with actual values
